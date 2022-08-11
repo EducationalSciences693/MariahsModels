@@ -9,8 +9,9 @@ using HypothesisTests
 using JSON
 using Dates
 
+# const MODEL_DIR = "test"
 const MODEL_DIR = Dates.format(now(), "yyyymmddHHMMSS")
-mkdir("models/$MODEL_DIR")
+mkpath("models/$MODEL_DIR")
 
 let # local scope
 
@@ -57,11 +58,11 @@ fellowFilter(row) = (row[:Role] == "Fellow")
 prePostFellowFilter(row) = (row[:Role] == "Fellow" && row[:Session] in ["#01 / pre", "#11 / post"])
 defaultColors = EpistemicNetworkAnalysis.DEFAULT_EXTRA_COLORS
 sessionColors = RGB.(range(HSL(colorant"red"),
-                           stop=HSL(colorant"green"),
+                           stop=HSL(colorant"blue"),
                            length=length(unique(data[!, :Session]))))
 
 println("Defining gamut...")
-function gamut(name, bugfix, rotation, myFilter, colors)
+function gamut(name, rotation, myFilter, colors, lims)
     println("\tfor $name...")
     filename = "models/$MODEL_DIR/$name"
     myENA = ENAModel(data, codes, conversations, units,
@@ -73,23 +74,24 @@ function gamut(name, bugfix, rotation, myFilter, colors)
         write(f, json(EpistemicNetworkAnalysis.test(myENA)))
     end
 
-    GR.setarrowsize(1/bugfix) # BUGFIX: divide the default arrow size by ceil(sqrt(number of plots in the multi plot)) = number of plots on the first row
-    p = plot(myENA, extraColors=colors, showUnits=false)
+    p = plot(myENA, lims=lims, extraColors=colors, showUnits=false)
     savefig(p, "$filename.png")
-    p = plot(myENA, extraColors=colors, leg=nothing)
+    p = plot(myENA, lims=lims, extraColors=colors, leg=nothing)
     savefig(p, "$(filename)_no_legend.png")
-    p = plot(myENA, extraColors=colors, leg=nothing,  showCIs=false, showNetworkLines=false, showTrajectoryBy=:SessionNum, spectralColorBy=:SessionNum)
+
+    GR.setarrowsize(1/9) # BUGFIX: divide the default arrow size by ceil(sqrt(number of plots in the multi plot)) = number of plots on the first row
+    p = plot(myENA, lims=lims, extraColors=sessionColors, leg=nothing,  showCIs=false, showUnits=false, showNetworkLines=false, showTrajectoryBy=:SessionNum, groupBy=:SessionNum)
     savefig(p, "$(filename)_hairball.png")
 end
 
 println("Running gamuts...")
-gamut("mr_pre_post", 2, prePostMR, prePostFellowFilter, defaultColors)
-gamut("mr_divergent", 2, activityTypeMR, fellowFilter, defaultColors)
-gamut("mcr_1_2", 9, sessionMCR_1_2, fellowFilter, sessionColors)
-gamut("mcr_3_4", 9, sessionMCR_3_4, fellowFilter, sessionColors)
-gamut("m2r_probe_toolkit", 2, probeToolkitM2R, fellowFilter, defaultColors)
-gamut("m2r_toolkit_proto", 2, toolkitPrototypeM2R, fellowFilter, defaultColors)
-gamut("m2r_proto_probe", 2, prototypeProbeM2R, fellowFilter, defaultColors)
+gamut("mr_pre_post", prePostMR, prePostFellowFilter, defaultColors, 1.1)
+gamut("mr_divergent", activityTypeMR, fellowFilter, defaultColors, 1)
+gamut("mcr_1_2", sessionMCR_1_2, fellowFilter, sessionColors, 1)
+gamut("mcr_3_4", sessionMCR_3_4, fellowFilter, sessionColors, 1)
+gamut("m2r_probe_toolkit", probeToolkitM2R, fellowFilter, defaultColors, 1)
+gamut("m2r_toolkit_proto", toolkitPrototypeM2R, fellowFilter, defaultColors, 1)
+gamut("m2r_proto_probe", prototypeProbeM2R, fellowFilter, defaultColors, 1)
 
 println("Done!")
 
