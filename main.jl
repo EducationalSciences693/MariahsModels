@@ -35,6 +35,8 @@ units = [:Session, :Speaker]
 codes = [
     :AI,
     :Compare,
+    :Construct,
+    :Groups,
     :Manipulate,
     :Teach,
     :Performance,

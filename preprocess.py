@@ -64,6 +64,44 @@ rows = (
 data["Compare"] = 0
 data.loc[rows, "Compare"] = 1
 
+# Construct
+print("Construct...")
+rows = (
+    data.Text.str.contains(r'(?i)\bmisconception') |
+    data.Text.str.contains(r'(?i)\bmisunderst') |
+    data.Text.str.contains(r'(?i)\bpersisten') |
+    data.Text.str.contains(r'(?i)\bkept going') |
+    data.Text.str.contains(r'(?i)\bkept trying') |
+    data.Text.str.contains(r'(?i)\bkeep trying') |
+    data.Text.str.contains(r'(?i)\bkeep going') |
+    data.Text.str.contains(r'(?i)^(?:(?!\bloud).)*\bvolume(?!.*\bloud)') |
+    data.Text.str.contains(r'(?i)\bsurface area') |
+    data.Text.str.contains(r'(?i)\bspatial reasoning') |
+    data.Text.str.contains(r'(?i)\bdo the math') |
+    data.Text.str.contains(r'(?i)\bproblem-solving') |
+    data.Text.str.contains(r'(?i)\blife skill'))
+
+data["Construct"] = 0
+data.loc[rows, "Construct"] = 1
+
+# Groups
+print("Groups...")
+rows = (
+    data.Text.str.contains(r'(?i)\bclass level') |
+    data.Text.str.contains(r'(?i)\bclass-level') |
+    data.Text.str.contains(r'(?i)\bmajority') |
+    data.Text.str.contains(r'(?i)\bclass result') |
+    data.Text.str.contains(r'(?i)class.*data') |
+    data.Text.str.contains(r'(?i)\ball at once') |
+    data.Text.str.contains(r'(?i)students.*average') |
+    data.Text.str.contains(r'(?i)average.*class') |
+    data.Text.str.contains(r'(?i)(?=.*class)(?=.*whole)') |
+    data.Text.str.contains(r'(?i)(?=.*(spectrum|(?<!came )across(?!.*(the top|graphs|anything))))(?=.*(students|class))') |
+    data.Text.str.contains(r'(?i)(?=.*\b(?<!at )all(?! (the way|that|their))\b)(?=.*kids)'))
+
+data["Groups"] = 0
+data.loc[rows, "Groups"] = 1
+
 # Manipulate
 print("Manipulate...")
 rows = (
