@@ -33,6 +33,7 @@ println("Defining basic model...")
 conversations = [:Session, :Activity, :Group]
 units = [:Session, :Speaker]
 codes = [
+    :Alert,
     :AI,
     :Compare,
     :Construct,

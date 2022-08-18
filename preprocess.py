@@ -5,6 +5,18 @@ filterwarnings("ignore", 'This pattern is interpreted as a regular expression, a
 # Load
 data = read_csv("data/sentences.csv")
 
+# Alert
+print("Alert...")
+rows = (
+    data.Text.str.contains(r'(?i)(?=.*\balert)(?=.*\b(change|show|creat|student|custom|look|off\b|on\b|match|look|interest|bigger|make))') |
+    data.Text.str.contains(r'(?i)\bnoti(fication|fy|fies)') |
+    data.Text.str.contains(r'(?i)\bindicat(e|ion|ing)') |
+    data.Text.str.contains(r'(?i)\bflag') |
+    data.Text.str.contains(r'(?i)\bhighlight'))
+
+data["Alert"] = 0
+data.loc[rows, "Alert"] = 1
+
 # AI
 print("AI...")
 rows = (
