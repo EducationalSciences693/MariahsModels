@@ -2,7 +2,7 @@
 
 1. Install the latest Python and Julia
 2. Open a terminal and `cd` into the directory for this project
-3. Run `python -m pip -r requirements.txt` to install Python dependencies
+3. Run `python -m pip install -r requirements.txt` to install Python dependencies
 4. Run `julia config.jl` to install Julia dependencies
 5. Add `sentences.csv` to the `data` folder
 6. Run `python preprocess.py` to prepare the coded data. If you need to add/modify regexes, do it here
