@@ -83,17 +83,15 @@ function gamut(name, rotation, myFilter, colors, lims)
     savefig(p, "$(filename)_no_legend.png")
 
     GR.setarrowsize(1/9) # BUGFIX: divide the default arrow size by ceil(sqrt(number of plots in the multi plot)) = number of plots on the first row
-    p = invoke(plot,
-               Tuple{EpistemicNetworkAnalysis.AbstractENAModel{<:EpistemicNetworkAnalysis.AbstractLinearENARotation}},
-               myENA;
-               lims=lims,
-               extraColors=sessionColors,
-               leg=nothing,
-               showCIs=false,
-               showUnits=false,
-            #    showNetworkLines=false,
-               showTrajectoryBy=:SessionNum,
-               groupBy=:SessionNum)
+    p = plot(myENA;
+             lims=lims,
+             extraColors=sessionColors,
+             leg=nothing,
+             showCIs=false,
+             showUnits=false,
+            #  showNetworkLines=false,
+             showTrajectoryBy=:SessionNum,
+             groupBy=:SessionNum)
     savefig(p, "$(filename)_hairball.png")
 end
 
